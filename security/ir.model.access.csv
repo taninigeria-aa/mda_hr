@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_employee_user,hr.employee user,hr.model_hr_employee,hr.group_hr_user,1,1,1,0
+access_hr_employee_manager,hr.employee manager,hr.model_hr_employee,hr.group_hr_manager,1,1,1,1
+access_hr_employee_public,hr.employee public,hr.model_hr_employee,base.group_user,1,1,0,0
+access_resource_calendar_user,resource.calendar.user,resource.model_resource_calendar,base.group_user,1,1,0,0
+access_resource_calendar_attendance_user,resource.calendar.attendance.user,resource.model_resource_calendar_attendance,base.group_user,1,1,0,0
+access_resource_calendar_hr_user,resource.calendar.hr.user,resource.model_resource_calendar,hr.group_hr_user,1,1,1,1
+access_resource_calendar_attendance_hr_user,resource.calendar.attendance.hr.user,resource.model_resource_calendar_attendance,hr.group_hr_user,1,1,1,1
+access_mda_hr_promotion_history_user,mda.hr.promotion.history user,mda_hr.model_mda_hr_promotion_history,hr.group_hr_user,1,1,1,1
+access_mda_hr_promotion_history_manager,mda.hr.promotion.history manager,mda_hr.model_mda_hr_promotion_history,hr.group_hr_manager,1,1,1,1
+access_mda_hr_promotion_schedule_user,mda.hr.promotion.schedule user,mda_hr.model_mda_hr_promotion_schedule,hr.group_hr_user,1,1,0,0
+access_mda_hr_promotion_schedule_manager,mda.hr.promotion.schedule manager,mda_hr.model_mda_hr_promotion_schedule,hr.group_hr_manager,1,1,1,1

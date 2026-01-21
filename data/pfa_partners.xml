@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- PFA Partners -->
+        <record id="pfa_stanbic" model="res.partner">
+            <field name="name">Stanbic IBTC Pension Managers</field>
+            <field name="is_company">True</field>
+        </record>
+
+        <record id="pfa_trust_fund" model="res.partner">
+            <field name="name">TRUST FUND PENSION</field>
+            <field name="is_company">True</field>
+        </record>
+
+        <record id="pfa_sigma" model="res.partner">
+            <field name="name">Sigma Pensions Limited</field>
+            <field name="is_company">True</field>
+        </record>
+    </data>
+</odoo>

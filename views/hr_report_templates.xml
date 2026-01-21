@@ -1,0 +1,628 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Report Actions -->
+    <report
+        id="action_employee_master_report"
+        model="hr.employee.report"
+        string="Employee Master Report"
+        report_type="qweb-pdf"
+        name="mda_hr.employee_master_report_template"
+        file="mda_hr.employee_master_report"
+        print_report_name="'Employee Master Report - %s' % (object.company.name,)"
+    />
+
+    <report
+        id="action_pension_compliance_report"
+        model="hr.employee.report"
+        string="Pension Compliance Report"
+        report_type="qweb-pdf"
+        name="mda_hr.pension_compliance_report_template"
+        file="mda_hr.pension_compliance_report"
+        print_report_name="'Pension Compliance Report - %s' % (object.company.name,)"
+    />
+
+    <report
+        id="action_retirement_schedule_report"
+        model="hr.employee.report"
+        string="Retirement Schedule Report"
+        report_type="qweb-pdf"
+        name="mda_hr.retirement_schedule_report_template"
+        file="mda_hr.retirement_schedule_report"
+        print_report_name="'Retirement Schedule Report - %s' % (object.company.name,)"
+    />
+
+    <report
+        id="action_geographical_report"
+        model="hr.employee.report"
+        string="Geographical Distribution Report"
+        report_type="qweb-pdf"
+        name="mda_hr.geographical_distribution_report_template"
+        file="mda_hr.geographical_distribution_report"
+        print_report_name="'Geographical Distribution Report - %s' % (object.company.name,)"
+    />
+
+    <report
+        id="action_qualification_report"
+        model="hr.employee.report"
+        string="Qualification Analysis Report"
+        report_type="qweb-pdf"
+        name="mda_hr.qualification_analysis_report_template"
+        file="mda_hr.qualification_analysis_report"
+        print_report_name="'Qualification Analysis Report - %s' % (object.company.name,)"
+    />
+
+    <!-- Employee Master Report Template -->
+    <template id="employee_master_report_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        
+                        <div class="row">
+                            <div class="col-12">
+                                <h2 class="text-center">EMPLOYEE MASTER REPORT</h2>
+                                <h4 class="text-center"><span t-field="company.name"/></h4>
+                                <p class="text-center">Report Generated: <span t-esc="print_date.strftime('%B %d, %Y at %I:%M %p')"/></p>
+                            </div>
+                        </div>
+                        
+                        <br/>
+                        
+                        <table class="table table-sm table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>S/N</th>
+                                    <th>File No.</th>
+                                    <th>Name</th>
+                                    <th>IPPIS</th>
+                                    <th>Rank</th>
+                                    <th>Department</th>
+                                    <th>Grade Level</th>
+                                    <th>Status</th>
+                                    <th>State</th>
+                                    <th>Appointment Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="counter" t-value="1"/>
+                                <tr t-foreach="docs" t-as="employee">
+                                    <td><span t-esc="counter"/></td>
+                                    <td><span t-field="employee.file_number"/></td>
+                                    <td><span t-field="employee.name"/></td>
+                                    <td><span t-field="employee.ippis"/></td>
+                                    <td><span t-field="employee.rank"/></td>
+                                    <td><span t-field="employee.department_id.name"/></td>
+                                    <td><span t-field="employee.salary_grade_level"/></td>
+                                    <td><span t-field="employee.employee_status"/></td>
+                                    <td><span t-field="employee.state_of_origin"/></td>
+                                    <td><span t-field="employee.appointment_type"/></td>
+                                    <t t-set="counter" t-value="counter + 1"/>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <p><strong>Total Employees: </strong><span t-esc="len(docs)"/></p>
+                            </div>
+                            <div class="col-6 text-right">
+                                <p><strong>Report Date: </strong><span t-esc="print_date.strftime('%B %d, %Y')"/></p>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- Pension Compliance Report Template -->
+    <template id="pension_compliance_report_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="oe_structure"/>
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <h2 class="text-center">PENSION COMPLIANCE REPORT</h2>
+                            <h4 class="text-center"><span t-field="company.name"/></h4>
+                            <p class="text-center">Report Generated: <span t-esc="print_date.strftime('%B %d, %Y at %I:%M %p')"/></p>
+                        </div>
+                    </div>
+                    
+                    <br/>
+                    
+                    <!-- Summary Section -->
+                    <div class="row">
+                        <div class="col-12">
+                            <h4>COMPLIANCE SUMMARY</h4>
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td><strong>Total Permanent Staff</strong></td>
+                                    <td><span t-esc="total_permanent"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Staff with PFA</strong></td>
+                                    <td><span t-esc="with_pfa"/> (<span t-esc="round((with_pfa/total_permanent)*100, 1) if total_permanent > 0 else 0"/>%)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Staff without PFA</strong></td>
+                                    <td><span t-esc="without_pfa"/> (<span t-esc="round((without_pfa/total_permanent)*100, 1) if total_permanent > 0 else 0"/>%)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Staff with RSA PIN</strong></td>
+                                    <td><span t-esc="with_rsa"/> (<span t-esc="round((with_rsa/total_permanent)*100, 1) if total_permanent > 0 else 0"/>%)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Staff without RSA PIN</strong></td>
+                                    <td><span t-esc="without_rsa"/> (<span t-esc="round((without_rsa/total_permanent)*100, 1) if total_permanent > 0 else 0"/>%)</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <br/>
+                    
+                    <!-- Employees without PFA -->
+                    <t t-if="employees_without_pfa">
+                        <h4>STAFF WITHOUT PFA</h4>
+                        <table class="table table-sm table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>S/N</th>
+                                    <th>File No.</th>
+                                    <th>Name</th>
+                                    <th>Department</th>
+                                    <th>Grade Level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="counter" t-value="1"/>
+                                <tr t-foreach="employees_without_pfa" t-as="employee">
+                                    <td><span t-esc="counter"/></td>
+                                    <td><span t-field="employee.file_number"/></td>
+                                    <td><span t-field="employee.name"/></td>
+                                    <td><span t-field="employee.department_id.name"/></td>
+                                    <td><span t-field="employee.salary_grade_level"/></td>
+                                    <t t-set="counter" t-value="counter + 1"/>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/>
+                    </t>
+                    
+                    <!-- Employees without RSA PIN -->
+                    <t t-if="employees_without_rsa">
+                        <h4>STAFF WITHOUT RSA PIN</h4>
+                        <table class="table table-sm table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>S/N</th>
+                                    <th>File No.</th>
+                                    <th>Name</th>
+                                    <th>Department</th>
+                                    <th>Grade Level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="counter" t-value="1"/>
+                                <tr t-foreach="employees_without_rsa" t-as="employee">
+                                    <td><span t-esc="counter"/></td>
+                                    <td><span t-field="employee.file_number"/></td>
+                                    <td><span t-field="employee.name"/></td>
+                                    <td><span t-field="employee.department_id.name"/></td>
+                                    <td><span t-field="employee.salary_grade_level"/></td>
+                                    <t t-set="counter" t-value="counter + 1"/>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- Retirement Schedule Report Template -->
+    <template id="retirement_schedule_report_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="oe_structure"/>
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <h2 class="text-center">RETIREMENT SCHEDULE REPORT</h2>
+                            <h4 class="text-center"><span t-field="company.name"/></h4>
+                            <p class="text-center">Report Generated: <span t-esc="print_date.strftime('%B %d, %Y at %I:%M %p')"/></p>
+                        </div>
+                    </div>
+                    
+                    <br/>
+                    
+                    <t t-foreach="retirement_by_year.items()" t-as="year_data">
+                        <t t-set="year" t-value="year_data[0]"/>
+                        <t t-set="employees" t-value="year_data[1]"/>
+                        
+                        <h4>RETIRING IN <span t-esc="year"/> (<span t-esc="len(employees)"/> employees)</h4>
+                        <table class="table table-sm table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>S/N</th>
+                                    <th>File No.</th>
+                                    <th>Name</th>
+                                    <th>Department</th>
+                                    <th>Rank</th>
+                                    <th>Grade Level</th>
+                                    <th>Retirement Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="counter" t-value="1"/>
+                                <tr t-foreach="employees" t-as="employee">
+                                    <td><span t-esc="counter"/></td>
+                                    <td><span t-field="employee.file_number"/></td>
+                                    <td><span t-field="employee.name"/></td>
+                                    <td><span t-field="employee.department_id.name"/></td>
+                                    <td><span t-field="employee.rank"/></td>
+                                    <td><span t-field="employee.salary_grade_level"/></td>
+                                    <td><span t-field="employee.retirement_date"/></td>
+                                    <t t-set="counter" t-value="counter + 1"/>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- Geographical Distribution Report Template -->
+    <template id="geographical_distribution_report_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="oe_structure"/>
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <h2 class="text-center">GEOGRAPHICAL DISTRIBUTION REPORT</h2>
+                            <h4 class="text-center"><span t-field="company.name"/></h4>
+                            <p class="text-center">Report Generated: <span t-esc="print_date.strftime('%B %d, %Y at %I:%M %p')"/></p>
+                        </div>
+                    </div>
+                    
+                    <br/>
+                    
+                    <!-- Geopolitical Zone Distribution -->
+                    <div class="row">
+                        <div class="col-6">
+                            <h4>BY GEOPOLITICAL ZONE</h4>
+                            <table class="table table-bordered">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Zone</th>
+                                        <th>Count</th>
+                                        <th>Percentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="zone_distribution.items()" t-as="zone_data">
+                                        <td><span t-esc="zone_data[0]"/></td>
+                                        <td><span t-esc="zone_data[1]"/></td>
+                                        <td><span t-esc="round((zone_data[1]/total_employees)*100, 1) if total_employees > 0 else 0"/>%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- State Distribution -->
+                        <div class="col-6">
+                            <h4>BY STATE (TOP 10)</h4>
+                            <table class="table table-bordered">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>State</th>
+                                        <th>Count</th>
+                                        <th>Percentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="sorted_states" t-value="sorted(state_distribution.items(), key=lambda x: x[1], reverse=True)[:10]"/>
+                                    <tr t-foreach="sorted_states" t-as="state_data">
+                                        <td><span t-esc="state_data[0]"/></td>
+                                        <td><span t-esc="state_data[1]"/></td>
+                                        <td><span t-esc="round((state_data[1]/total_employees)*100, 1) if total_employees > 0 else 0"/>%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <p><strong>Total Employees: </strong><span t-esc="total_employees"/></p>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- Qualification Analysis Report Template -->
+    <template id="qualification_analysis_report_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="oe_structure"/>
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <h2 class="text-center">QUALIFICATION ANALYSIS REPORT</h2>
+                            <h4 class="text-center"><span t-field="company.name"/></h4>
+                            <p class="text-center">Report Generated: <span t-esc="print_date.strftime('%B %d, %Y at %I:%M %p')"/></p>
+                        </div>
+                    </div>
+                    
+                    <br/>
+                    
+                    <!-- Qualification Summary -->
+                    <div class="row">
+                        <div class="col-8">
+                            <h4>QUALIFICATION DISTRIBUTION</h4>
+                            <table class="table table-bordered">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Qualification</th>
+                                        <th>Count</th>
+                                        <th>Percentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="sorted_quals" t-value="sorted(qualification_stats.items(), key=lambda x: x[1]['count'], reverse=True)"/>
+                                    <tr t-foreach="sorted_quals" t-as="qual_data">
+                                        <td><span t-esc="qual_data[0]"/></td>
+                                        <td><span t-esc="qual_data[1]['count']"/></td>
+                                        <td><span t-esc="round((qual_data[1]['count']/total_employees)*100, 1) if total_employees > 0 else 0"/>%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-4">
+                            <h4>SUMMARY</h4>
+                            <p><strong>Total Employees:</strong> <span t-esc="total_employees"/></p>
+                            <p><strong>Qualification Categories:</strong> <span t-esc="len(qualification_stats)"/></p>
+                            
+                            <t t-if="qualification_stats.get('PhD', False)">
+                                <p><strong>PhD Holders:</strong> <span t-esc="qualification_stats['PhD']['count']"/></p>
+                            </t>
+                            <t t-if="qualification_stats.get('M.Sc/M.A', False)">
+                                <p><strong>Masters Holders:</strong> <span t-esc="qualification_stats['M.Sc/M.A']['count']"/></p>
+                            </t>
+                            <t t-if="qualification_stats.get('B.Sc/B.A', False)">
+                                <p><strong>Degree Holders:</strong> <span t-esc="qualification_stats['B.Sc/B.A']['count']"/></p>
+                            </t>
+                        </div>
+                    </div>
+                    
+                    <br/>
+                    
+                    <!-- Detailed Breakdown by Qualification -->
+                    <t t-foreach="sorted_quals" t-as="qual_data">
+                        <h4><span t-esc="qual_data[0]"/> HOLDERS (<span t-esc="qual_data[1]['count']"/> employees)</h4>
+                        <table class="table table-sm table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>S/N</th>
+                                    <th>File No.</th>
+                                    <th>Name</th>
+                                    <th>Department</th>
+                                    <th>Rank</th>
+                                    <th>Grade Level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="counter" t-value="1"/>
+                                <tr t-foreach="qual_data[1]['employees']" t-as="employee">
+                                    <td><span t-esc="counter"/></td>
+                                    <td><span t-field="employee.file_number"/></td>
+                                    <td><span t-field="employee.name"/></td>
+                                    <td><span t-field="employee.department_id.name"/></td>
+                                    <td><span t-field="employee.rank"/></td>
+                                    <td><span t-field="employee.salary_grade_level"/></td>
+                                    <t t-set="counter" t-value="counter + 1"/>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- Individual Employee Report Template -->
+    <template id="employee_individual_report_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="employee">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        
+                        <div class="row">
+                            <div class="col-12">
+                                <h2 class="text-center">EMPLOYEE PROFILE REPORT</h2>
+                                <h4 class="text-center"><span t-field="employee.company_id.name"/></h4>
+                            </div>
+                        </div>
+                        
+                        <br/>
+                        
+                        <!-- Personal Information -->
+                        <div class="row">
+                            <div class="col-12">
+                                <h4>PERSONAL INFORMATION</h4>
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td width="30%"><strong>File Number</strong></td>
+                                        <td><span t-field="employee.file_number"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>IPPIS Number</strong></td>
+                                        <td><span t-field="employee.ippis"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Full Name</strong></td>
+                                        <td><span t-field="employee.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Date of Birth</strong></td>
+                                        <td><span t-field="employee.birthday"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Gender</strong></td>
+                                        <td><span t-field="employee.gender"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>State of Origin</strong></td>
+                                        <td><span t-field="employee.state_of_origin"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Local Government Area</strong></td>
+                                        <td><span t-field="employee.lga"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Geopolitical Zone</strong></td>
+                                        <td><span t-field="employee.geo_political_zone"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <br/>
+                        
+                        <!-- Employment Information -->
+                        <div class="row">
+                            <div class="col-12">
+                                <h4>EMPLOYMENT INFORMATION</h4>
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td width="30%"><strong>Department</strong></td>
+                                        <td><span t-field="employee.department_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Job Position</strong></td>
+                                        <td><span t-field="employee.job_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Rank</strong></td>
+                                        <td><span t-field="employee.rank"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Appointment Type</strong></td>
+                                        <td><span t-field="employee.appointment_type"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Salary Grade Level</strong></td>
+                                        <td><span t-field="employee.salary_grade_level"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Salary Structure</strong></td>
+                                        <td><span t-field="employee.salary_structure"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Date of First Appointment</strong></td>
+                                        <td><span t-field="employee.date_first_appointment"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Date of Present Appointment</strong></td>
+                                        <td><span t-field="employee.date_present_appointment"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Retirement Date</strong></td>
+                                        <td><span t-field="employee.retirement_date"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Age on Entry</strong></td>
+                                        <td><span t-field="employee.age_on_entry"/> years</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Employee Status</strong></td>
+                                        <td><span t-field="employee.employee_status"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <br/>
+                        
+                        <!-- Qualification and Pension Information -->
+                        <div class="row">
+                            <div class="col-6">
+                                <h4>QUALIFICATION</h4>
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td width="50%"><strong>Highest Qualification</strong></td>
+                                        <td><span t-field="employee.qualification"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Field of Study</strong></td>
+                                        <td><span t-field="employee.study_field"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Institution</strong></td>
+                                        <td><span t-field="employee.study_school"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            
+                            <div class="col-6" t-if="employee.appointment_type == 'permanent'">
+                                <h4>PENSION INFORMATION</h4>
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td width="50%"><strong>PFA</strong></td>
+                                        <td><span t-field="employee.pfa_name.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>RSA PIN</strong></td>
+                                        <td><span t-field="employee.rsa_pin"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <br/>
+                        
+                        <!-- Job Description -->
+                        <div class="row">
+                            <div class="col-12">
+                                <h4>JOB DESCRIPTION</h4>
+                                <div class="border p-3">
+                                    <span t-field="employee.job_description"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Remarks -->
+                        <div class="row" t-if="employee.remark">
+                            <div class="col-12">
+                                <h4>REMARKS</h4>
+                                <div class="border p-3">
+                                    <span t-field="employee.remark"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-4">
+                            <div class="col-12 text-right">
+                                <p><strong>Report Generated:</strong> <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%B %d, %Y at %I:%M %p')"/></p>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Create a completely new form view for Nigerian HR -->
+    <record id="hr_employee_form_nigerian_new" model="ir.ui.view">
+        <field name="name">hr.employee.form.nigerian.new</field>
+        <field name="model">hr.employee</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <form string="Employee">
+                <header>
+                    <field name="employee_status" widget="statusbar" statusbar_visible="active,inactive,suspended,retired"/>
+                </header>
+                
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <!-- Smart buttons can be added here if needed -->
+                    </div>
+                    
+                    <field name="image_1920" widget="image" class="oe_avatar" options='{"zoom": true, "preview_image": "image_128"}'/>
+                    
+                    <group string="Employee Information">
+                        <group>
+                            <field name="file_number" string="File Number"/>
+                            <field name="surname" string="Surname"/>
+                            <field name="middle_name" string="Middle Name"/>
+                            <field name="gender" string="Sex"/>
+                            <field name="rank" string="Rank"/>
+                            <field name="appointment_type" string="Type of Appointment"/>
+                            <field name="date_present_appointment" string="Date of Present Appointment" required="1"/>
+                            <field name="rsa_pin" string="RSA PIN"/>
+                            <field name="state_of_origin" string="State"/>
+                            <field name="geo_political_zone" string="Geo Political Zone"/>
+                            <field name="employee_status" string="Status"/>
+                            <field name="age_on_entry" string="Age on Entry"/>
+                            <field name="nature_of_desc" string="Nature of Description of Job"/>
+                        </group>
+                        <group>
+                            <field name="ippis" string="IPPIS"/>
+                            <field name="first_name" string="First Name"/>
+                            <field name="birthday" string="Date of Birth"/>
+                            <field name="department_id" string="Department"/>
+                            <field name="salary_grade_level" string="Salary Grade Level"/>
+                            <field name="date_first_appointment" string="Date of First Appointment" required="1"/>
+                            <field name="pfa_name" string="PFA Name"/>
+                            <field name="work_email" string="Email"/>
+                            <field name="lga" string="LGA"/>
+                            <field name="remark" string="Remark"/>
+                            <field name="work_location_id" string="Location"/>
+                            <field name="qualification" string="Qualification"/>
+                            <field name="salary_structure" string="Salary Structure"/>
+                        </group>
+                        <field name="name" invisible="1"/>
+                        <field name="retirement_date" invisible="1"/>
+                        <field name="next_promotion_due" invisible="1"/>
+                        <field name="job_description" invisible="1"/>
+                        <field name="private_email" invisible="1"/>
+                        <field name="work_phone" invisible="1"/>
+                        <field name="mobile_phone" invisible="1"/>
+                    </group>
+                    
+                    <notebook>
+                        <page name="work_info" string="Work Information">
+                            <group>
+                                <group string="Current Position">
+                                    <field name="job_id" string="Job Position"/>
+                                    <field name="job_title"/>
+                                    <field name="parent_id" string="Manager"/>
+                                    <field name="coach_id"/>
+                                </group>
+                                <group string="Attendance">
+                                    <field name="resource_id"/>
+                                    <field name="resource_calendar_id"/>
+                                    <field name="tz"/>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <page name="personal_info" string="Private Information">
+                            <group>
+                                <group string="Private Contact">
+                                    <field name="country_id" options='{"no_open": True, "no_create": True}'/>
+                                    <field name="identification_id"/>
+                                    <field name="passport_id"/>
+                                </group>
+                                <group string="Family Status">
+                                    <field name="marital"/>
+                                    <field name="spouse_complete_name" invisible="marital not in ['married', 'cohabitant']"/>
+                                    <field name="spouse_birthdate" invisible="marital not in ['married', 'cohabitant']"/>
+                                    <field name="children"/>
+                                </group>
+                                <group string="Emergency Contact">
+                                    <field name="emergency_contact"/>
+                                    <field name="emergency_phone"/>
+                                </group>
+                                <group string="Education">
+                                    <field name="certificate"/>
+                                    <field name="study_field"/>
+                                    <field name="study_school"/>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <page name="promotion_info" string="Promotion Information">
+                            <group>
+                                <group string="Promotion Status">
+                                    <field name="next_promotion_due" string="Next Promotion Due Date" readonly="1"/>
+                                    <field name="is_confirmed" string="Confirmed Staff" readonly="1"/>
+                                    <field name="date_confirmed" string="Date Confirmed"/>
+                                </group>
+                                <group string="Promotion Eligibility">
+                                    <field name="has_disciplinary_case" string="Has Disciplinary Case(s)"/>
+                                    <field name="passed_promotion_exam" string="Passed Promotion Exam"/>
+                                    <field name="promotion_exam_date" string="Promotion Exam Date" modifiers="{'invisible': [['passed_promotion_exam', '=', False]]}"/>
+                                    <field name="promotion_vacancy_available" string="Vacancy Available"/>
+                                </group>
+                            </group>
+                            <separator string="Promotion History"/>
+                            <field name="promotion_history_ids" mode="list"/>
+                        </page>
+                        
+                        <page name="hr_settings" string="HR Settings" groups="hr.group_hr_user">
+                            <group>
+                                <group string="Attendance">
+                                    <field name="pin" string="PIN Code"/>
+                                </group>
+                                <group string="Application Settings">
+                                    <field name="user_id" string="User"/>
+                                    <field name="user_partner_id" string="User's Partner"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Set this as the default form view for hr.employee -->
+    <record id="hr_employee_action_nigerian" model="ir.actions.act_window">
+        <field name="name">Employees</field>
+        <field name="res_model">hr.employee</field>
+        <field name="view_mode">kanban,form,list</field>
+        <field name="view_id" ref="hr_employee_form_nigerian_new"/>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new employee
+            </p>
+        </field>
+    </record>
+</odoo>
