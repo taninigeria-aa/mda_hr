@@ -153,18 +153,18 @@
     <!-- Promotion Report Summary Template -->
     <template id="report_promotion_report" t-name="mda_hr.report_promotion_report">
         <t t-call="web.html_container">
-            <t t-foreach="docs" t-as="doc">
-                <t t-call="web.external_layout">
-                    <div class="page">
-                        <h1 class="text-center">Promotion History Report</h1>
-
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h1 class="text-center">Promotion History Report</h1>
+                    
+                    <t t-foreach="docs" t-as="doc">
                         <div class="row mt-4">
                             <div class="col-6">
                                 <strong>Employee Information</strong>
                                 <table class="table table-sm">
                                     <tr>
                                         <td class="w-25"><strong>Name:</strong></td>
-                                        <td><t t-out="doc.employee_name"/></td>
+                                        <td><t t-out="doc.employee_name or 'N/A'"/></td>
                                     </tr>
                                     <tr>
                                         <td><strong>File Number:</strong></td>
@@ -172,7 +172,7 @@
                                     </tr>
                                     <tr>
                                         <td><strong>Department:</strong></td>
-                                        <td><t t-out="doc.department_id.name or 'N/A'"/></td>
+                                        <td><t t-out="(doc.department_id.name or 'N/A') if doc.department_id else 'N/A'"/></td>
                                     </tr>
                                 </table>
                             </div>
@@ -188,15 +188,8 @@
                                         <td><t t-out="doc.current_rank or 'N/A'"/></td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Status:</strong></td>
-                                        <td>
-                                            <t t-if="doc.is_eligible">
-                                                <span class="badge badge-success">Eligible</span>
-                                            </t>
-                                            <t t-else="">
-                                                <span class="badge badge-danger">Not Eligible</span>
-                                            </t>
-                                        </td>
+                                        <td><strong>Total Promotions:</strong></td>
+                                        <td><t t-out="str(doc.promotion_count or 0)"/></td>
                                     </tr>
                                 </table>
                             </div>
@@ -208,39 +201,34 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr class="table-active">
-                                    <th><strong>Total Promotions</strong></th>
                                     <th><strong>Last Promotion Date</strong></th>
                                     <th><strong>Promotion Status</strong></th>
+                                    <th><strong>Eligible</strong></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><t t-out="doc.promotion_count or 0"/></td>
-                                    <td><t t-out="doc.last_promotion_date.strftime('%d-%m-%Y') if doc.last_promotion_date else 'N/A'"/></td>
+                                    <td><t t-out="(doc.last_promotion_date.strftime('%d-%m-%Y') if doc.last_promotion_date else 'N/A')"/></td>
+                                    <td><t t-out="doc.promotion_state or 'N/A'"/></td>
                                     <td>
-                                        <t t-if="doc.promotion_state == 'draft'">
-                                            <span class="badge badge-secondary">Draft</span>
-                                        </t>
-                                        <t t-elif="doc.promotion_state == 'approved'">
-                                            <span class="badge badge-info">Approved</span>
-                                        </t>
-                                        <t t-elif="doc.promotion_state == 'implemented'">
-                                            <span class="badge badge-success">Implemented</span>
+                                        <t t-if="doc.is_eligible">
+                                            <span class="badge badge-success">Yes</span>
                                         </t>
                                         <t t-else="">
-                                            <span class="badge badge-warning">Pending</span>
+                                            <span class="badge badge-danger">No</span>
                                         </t>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-
+                        
                         <hr class="mt-4"/>
-                        <p class="text-muted text-center" style="font-size: 0.85em;">
-                            Promotion Summary Report
-                        </p>
-                    </div>
-                </t>
+                    </t>
+                    
+                    <p class="text-muted text-center" style="font-size: 0.85em;">
+                        Promotion Summary Report
+                    </p>
+                </div>
             </t>
         </t>
     </template>
