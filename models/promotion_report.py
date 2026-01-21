@@ -102,7 +102,7 @@ class PromotionEligibilityReport(models.Model):
     # Eligibility Criteria
     confirmed_eligible = fields.Boolean(string='Staff Confirmed (2yrs)', readonly=True)
     maturity_eligible = fields.Boolean(string='Maturity Period Met', readonly=True)
-    discipline_check = fields.Boolean(string='No Disciplinary Cases', readonly=True)
+    discipline_check = fields.Boolean(string='No Disciplinary Cases (Continuous)', readonly=True)
     exam_check = fields.Boolean(string='Passed Promotion Exam', readonly=True)
     vacancy_check = fields.Boolean(string='Vacancy Available', readonly=True)
 

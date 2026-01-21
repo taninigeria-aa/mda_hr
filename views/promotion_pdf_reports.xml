@@ -354,12 +354,12 @@
 
                     <h3 class="mt-4">Legend</h3>
                     <ul style="font-size: 0.9em;">
-                        <li><strong>Confirmed:</strong> Staff must be confirmed (2 years from appointment)</li>
-                        <li><strong>Discipline:</strong> No disciplinary cases on record</li>
-                        <li><strong>Exam:</strong> Must have passed promotion examination</li>
-                        <li><strong>Vacancy:</strong> Promotion vacancy must be available</li>
-                        <li><strong>Score %:</strong> Percentage of criteria met (out of 4 criteria)</li>
-                        <li><strong>Eligible:</strong> Overall eligibility status based on all criteria</li>
+                        <li><strong>Confirmed:</strong> Staff must be confirmed (2 years from appointment) - Continuous requirement</li>
+                        <li><strong>Discipline:</strong> Absence of disciplinary cases - Continuous positive criterion</li>
+                        <li><strong>Exam:</strong> Must have passed promotion examination - Continuous requirement</li>
+                        <li><strong>Vacancy:</strong> Promotion vacancy must be available - Continuous requirement</li>
+                        <li><strong>Score %:</strong> Percentage of criteria met (out of 4 criteria) - Applied at all promotion instances</li>
+                        <li><strong>Eligible:</strong> Overall eligibility status based on ALL criteria being met</li>
                     </ul>
                 </div>
             </t>
