@@ -15,7 +15,7 @@
         <field name="model">mda.promotion.report</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">mda_hr.report_promotion_report</field>
-        <field name="print_report_name">Promotion_Report_${object.employee_name}_${datetime.now().strftime('%Y%m%d')}</field>
+        <field name="print_report_name">Promotion_Report_${object.employee_name}</field>
         <field name="binding_model_id" ref="model_mda_promotion_report"/>
     </record>
 
@@ -142,7 +142,7 @@
 
                         <hr class="mt-4"/>
                         <p class="text-muted text-center" style="font-size: 0.85em;">
-                            Generated on <t t-out="datetime.now().strftime('%d-%m-%Y %H:%M:%S')"/>
+                            Promotion History Report
                         </p>
                     </div>
                 </t>
@@ -237,7 +237,7 @@
 
                         <hr class="mt-4"/>
                         <p class="text-muted text-center" style="font-size: 0.85em;">
-                            Generated on <t t-out="datetime.now().strftime('%d-%m-%Y %H:%M:%S')"/>
+                            Promotion Summary Report
                         </p>
                     </div>
                 </t>
@@ -251,7 +251,7 @@
         <field name="model">mda.promotion.eligibility.report</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">mda_hr.report_promotion_eligibility</field>
-        <field name="print_report_name">Promotion_Eligibility_${datetime.now().strftime('%Y%m%d')}</field>
+        <field name="print_report_name">Promotion_Eligibility_Report</field>
         <field name="binding_model_id" ref="model_mda_promotion_eligibility_report"/>
     </record>
 
@@ -262,7 +262,7 @@
                 <div class="page">
                     <h1 class="text-center">Promotion Eligibility Assessment Report</h1>
                     <p class="text-center text-muted" style="font-size: 0.9em;">
-                        Generated on <t t-out="datetime.now().strftime('%d-%m-%Y %H:%M:%S')"/>
+                        Promotion Eligibility Assessment
                     </p>
 
                     <hr/>
@@ -384,7 +384,7 @@
         <field name="model">mda.promotion.eligibility.report</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">mda_hr.report_promotion_eligibility</field>
-        <field name="print_report_name">Promotion_Eligibility_${object.employee_name}_${datetime.now().strftime('%Y%m%d')}</field>
+        <field name="print_report_name">Promotion_Eligibility_${object.employee_name}</field>
         <field name="binding_model_id" ref="model_mda_promotion_eligibility_report"/>
     </record>
 
