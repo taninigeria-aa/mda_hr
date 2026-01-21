@@ -16,6 +16,7 @@
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">mda_hr.report_promotion_report</field>
         <field name="print_report_name">Promotion_Report_${object.employee_name}_${datetime.now().strftime('%Y%m%d')}</field>
+        <field name="binding_model_id" ref="model_mda_promotion_report"/>
     </record>
 
     <!-- Promotion History Report Template -->
@@ -251,6 +252,7 @@
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">mda_hr.report_promotion_eligibility</field>
         <field name="print_report_name">Promotion_Eligibility_${datetime.now().strftime('%Y%m%d')}</field>
+        <field name="binding_model_id" ref="model_mda_promotion_eligibility_report"/>
     </record>
 
     <!-- Promotion Eligibility Report Template -->
@@ -383,6 +385,7 @@
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">mda_hr.report_promotion_eligibility</field>
         <field name="print_report_name">Promotion_Eligibility_${object.employee_name}_${datetime.now().strftime('%Y%m%d')}</field>
+        <field name="binding_model_id" ref="model_mda_promotion_eligibility_report"/>
     </record>
 
 </odoo>
