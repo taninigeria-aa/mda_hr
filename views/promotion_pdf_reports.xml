@@ -9,6 +9,15 @@
         <field name="print_report_name">Promotion_History_${object.employee_id.name}_${object.effective_date.strftime('%Y%m%d')}</field>
     </record>
 
+    <!-- Promotion Report PDF Action (for mda.promotion.report model) -->
+    <record id="action_report_promotion_report" model="ir.actions.report">
+        <field name="name">Promotion Report PDF</field>
+        <field name="model">mda.promotion.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">mda_hr.report_promotion_report</field>
+        <field name="print_report_name">Promotion_Report_${object.employee_name}_${datetime.now().strftime('%Y%m%d')}</field>
+    </record>
+
     <!-- Promotion History Report Template -->
     <template id="report_promotion_history" t-name="mda_hr.report_promotion_history">
         <t t-call="web.html_container">
@@ -128,6 +137,101 @@
                                 <td><strong>Eligibility Status:</strong></td>
                                 <td style="font-size: 0.9em;"><t t-out="doc.promotion_eligibility_status or 'Not assessed'"/></td>
                             </tr>
+                        </table>
+
+                        <hr class="mt-4"/>
+                        <p class="text-muted text-center" style="font-size: 0.85em;">
+                            Generated on <t t-out="datetime.now().strftime('%d-%m-%Y %H:%M:%S')"/>
+                        </p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- Promotion Report Summary Template -->
+    <template id="report_promotion_report" t-name="mda_hr.report_promotion_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h1 class="text-center">Promotion History Report</h1>
+
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <strong>Employee Information</strong>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td class="w-25"><strong>Name:</strong></td>
+                                        <td><t t-out="doc.employee_name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>File Number:</strong></td>
+                                        <td><t t-out="doc.file_number or 'N/A'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Department:</strong></td>
+                                        <td><t t-out="doc.department_id.name or 'N/A'"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <strong>Current Position</strong>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td class="w-25"><strong>Grade Level:</strong></td>
+                                        <td><t t-out="doc.current_grade or 'N/A'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Rank:</strong></td>
+                                        <td><t t-out="doc.current_rank or 'N/A'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Status:</strong></td>
+                                        <td>
+                                            <t t-if="doc.is_eligible">
+                                                <span class="badge badge-success">Eligible</span>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="badge badge-danger">Not Eligible</span>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <hr class="mt-4"/>
+
+                        <h3 class="mt-4">Promotion Summary</h3>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr class="table-active">
+                                    <th><strong>Total Promotions</strong></th>
+                                    <th><strong>Last Promotion Date</strong></th>
+                                    <th><strong>Promotion Status</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><t t-out="doc.promotion_count or 0"/></td>
+                                    <td><t t-out="doc.last_promotion_date.strftime('%d-%m-%Y') if doc.last_promotion_date else 'N/A'"/></td>
+                                    <td>
+                                        <t t-if="doc.promotion_state == 'draft'">
+                                            <span class="badge badge-secondary">Draft</span>
+                                        </t>
+                                        <t t-elif="doc.promotion_state == 'approved'">
+                                            <span class="badge badge-info">Approved</span>
+                                        </t>
+                                        <t t-elif="doc.promotion_state == 'implemented'">
+                                            <span class="badge badge-success">Implemented</span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="badge badge-warning">Pending</span>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </tbody>
                         </table>
 
                         <hr class="mt-4"/>
@@ -271,5 +375,14 @@
             </t>
         </t>
     </template>
+
+    <!-- Eligibility Report PDF Action (for mda.promotion.eligibility.report model) -->
+    <record id="action_report_eligibility_report" model="ir.actions.report">
+        <field name="name">Eligibility Report PDF</field>
+        <field name="model">mda.promotion.eligibility.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">mda_hr.report_promotion_eligibility</field>
+        <field name="print_report_name">Promotion_Eligibility_${object.employee_name}_${datetime.now().strftime('%Y%m%d')}</field>
+    </record>
 
 </odoo>
