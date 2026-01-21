@@ -134,7 +134,7 @@
                 <field name="discipline_check" widget="boolean"/>
                 <field name="exam_check" widget="boolean"/>
                 <field name="vacancy_check" widget="boolean"/>
-                <field name="eligibility_percentage" widget="percentage"/>
+                <field name="eligibility_percentage"/>
                 <field name="overall_eligible" widget="boolean"/>
             </list>
         </field>
@@ -187,7 +187,7 @@
 
                     <separator string="Overall Eligibility Score"/>
                     <group>
-                        <field name="eligibility_percentage" widget="percentage"/>
+                        <field name="eligibility_percentage"/>
                         <field name="overall_eligible" widget="boolean"/>
                     </group>
                 </sheet>

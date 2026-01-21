@@ -141,7 +141,7 @@ class PromotionEligibilityReport(models.Model):
                     ((CASE WHEN emp.is_confirmed THEN 1 ELSE 0 END +
                       CASE WHEN NOT emp.has_disciplinary_case THEN 1 ELSE 0 END +
                       CASE WHEN emp.passed_promotion_exam THEN 1 ELSE 0 END +
-                      CASE WHEN emp.promotion_vacancy_available THEN 1 ELSE 0 END) * 100.0 / 4), 2
+                      CASE WHEN emp.promotion_vacancy_available THEN 1 ELSE 0 END) / 4.0 * 100), 2
                 ) as eligibility_percentage
             FROM hr_employee emp
             WHERE emp.active = TRUE

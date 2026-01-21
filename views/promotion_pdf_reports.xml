@@ -243,7 +243,7 @@
                                         </t>
                                     </td>
                                     <td class="text-center">
-                                        <t t-out="'{:.0f}%'.format(doc.eligibility_percentage)"/>
+                                        <t t-out="'{:.1f}%'.format(doc.eligibility_percentage)"/>
                                     </td>
                                     <td class="text-center">
                                         <t t-if="doc.overall_eligible">
