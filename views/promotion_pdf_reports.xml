@@ -6,7 +6,7 @@
         <field name="model">mda.hr.promotion.history</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">mda_hr.report_promotion_history</field>
-        <field name="print_report_name">Promotion_History_${object.employee_id.name}_${object.effective_date.strftime('%Y%m%d')}</field>
+        <field name="print_report_name">'Promotion_History_' + object.employee_id.name</field>
     </record>
 
     <!-- Promotion Report PDF Action (for mda.promotion.report model) -->
@@ -15,7 +15,7 @@
         <field name="model">mda.promotion.report</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">mda_hr.report_promotion_report</field>
-        <field name="print_report_name">Promotion_Report_${object.employee_name}</field>
+        <field name="print_report_name">'Promotion_Report_' + object.employee_name</field>
         <field name="binding_model_id" ref="model_mda_promotion_report"/>
     </record>
 
@@ -251,7 +251,7 @@
         <field name="model">mda.promotion.eligibility.report</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">mda_hr.report_promotion_eligibility</field>
-        <field name="print_report_name">Promotion_Eligibility_Report</field>
+        <field name="print_report_name">'Promotion_Eligibility_Report'</field>
         <field name="binding_model_id" ref="model_mda_promotion_eligibility_report"/>
     </record>
 
@@ -384,7 +384,7 @@
         <field name="model">mda.promotion.eligibility.report</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">mda_hr.report_promotion_eligibility</field>
-        <field name="print_report_name">Promotion_Eligibility_${object.employee_name}</field>
+        <field name="print_report_name">'Eligibility_' + object.employee_name</field>
         <field name="binding_model_id" ref="model_mda_promotion_eligibility_report"/>
     </record>
 
