@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Promotion Report - List View -->
+    <record id="mda_promotion_report_list" model="ir.ui.view">
+        <field name="name">mda.promotion.report.list</field>
+        <field name="model">mda.promotion.report</field>
+        <field name="arch" type="xml">
+            <list string="Promotion Report">
+                <field name="employee_name"/>
+                <field name="file_number"/>
+                <field name="department_id"/>
+                <field name="current_grade"/>
+                <field name="current_rank"/>
+                <field name="promotion_count"/>
+                <field name="last_promotion_date"/>
+                <field name="is_eligible" widget="boolean"/>
+                <field name="promotion_state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Promotion Report - Form View -->
+    <record id="mda_promotion_report_form" model="ir.ui.view">
+        <field name="name">mda.promotion.report.form</field>
+        <field name="model">mda.promotion.report</field>
+        <field name="arch" type="xml">
+            <form string="Promotion Report" create="0" edit="0" delete="0">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <!-- Stats boxes can be added here -->
+                    </div>
+
+                    <group string="Employee Information">
+                        <group>
+                            <field name="employee_name"/>
+                            <field name="file_number"/>
+                            <field name="department_id"/>
+                        </group>
+                        <group>
+                            <field name="current_grade"/>
+                            <field name="current_rank"/>
+                            <field name="appointment_date"/>
+                        </group>
+                    </group>
+
+                    <group string="Promotion History">
+                        <group>
+                            <field name="promotion_count"/>
+                            <field name="last_promotion_date"/>
+                        </group>
+                        <group>
+                            <field name="new_grade"/>
+                            <field name="new_rank"/>
+                            <field name="promotion_effective_date"/>
+                        </group>
+                    </group>
+
+                    <group string="Eligibility Status">
+                        <group>
+                            <field name="is_confirmed" widget="boolean"/>
+                            <field name="date_confirmed"/>
+                            <field name="has_disciplinary_case" widget="boolean"/>
+                        </group>
+                        <group>
+                            <field name="passed_promotion_exam" widget="boolean"/>
+                            <field name="promotion_vacancy" widget="boolean"/>
+                            <field name="is_eligible" widget="boolean"/>
+                        </group>
+                    </group>
+
+                    <group string="Status">
+                        <field name="promotion_state"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Promotion Report - Search View -->
+    <record id="mda_promotion_report_search" model="ir.ui.view">
+        <field name="name">mda.promotion.report.search</field>
+        <field name="model">mda.promotion.report</field>
+        <field name="arch" type="xml">
+            <search string="Promotion Report">
+                <field name="employee_name"/>
+                <field name="file_number"/>
+                <field name="department_id"/>
+                <field name="current_grade"/>
+                <field name="current_rank"/>
+                <separator/>
+                <filter name="eligible" string="Eligible for Promotion" domain="[('is_eligible', '=', True)]"/>
+                <filter name="not_eligible" string="Not Eligible" domain="[('is_eligible', '=', False)]"/>
+                <filter name="approved" string="Approved Promotions" domain="[('promotion_state', '=', 'approved')]"/>
+                <filter name="implemented" string="Implemented Promotions" domain="[('promotion_state', '=', 'implemented')]"/>
+                <separator/>
+                <filter name="has_promotions" string="Has Promotion History" domain="[('promotion_count', '>', 0)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_department" string="Department" context="{'group_by': 'department_id'}"/>
+                    <filter name="group_grade" string="Grade Level" context="{'group_by': 'current_grade'}"/>
+                    <filter name="group_status" string="Eligibility" context="{'group_by': 'is_eligible'}"/>
+                    <filter name="group_promotion_state" string="Promotion State" context="{'group_by': 'promotion_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Promotion Report - Action -->
+    <record id="action_mda_promotion_report" model="ir.actions.act_window">
+        <field name="name">Promotion Report</field>
+        <field name="res_model">mda.promotion.report</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="mda_promotion_report_list"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No promotion records found
+            </p>
+            <p>
+                This report shows all employee promotion history and eligibility status.
+            </p>
+        </field>
+    </record>
+
+    <!-- Promotion Eligibility Report - List View -->
+    <record id="mda_promotion_eligibility_report_list" model="ir.ui.view">
+        <field name="name">mda.promotion.eligibility.report.list</field>
+        <field name="model">mda.promotion.eligibility.report</field>
+        <field name="arch" type="xml">
+            <list string="Promotion Eligibility Report" decoration-success="overall_eligible" decoration-warning="eligibility_percentage &gt;= 50 and eligibility_percentage &lt; 100" decoration-danger="eligibility_percentage &lt; 50">
+                <field name="employee_name"/>
+                <field name="file_number"/>
+                <field name="department_id"/>
+                <field name="current_grade"/>
+                <field name="confirmed_eligible" widget="boolean"/>
+                <field name="discipline_check" widget="boolean"/>
+                <field name="exam_check" widget="boolean"/>
+                <field name="vacancy_check" widget="boolean"/>
+                <field name="eligibility_percentage" widget="percentage"/>
+                <field name="overall_eligible" widget="boolean"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Promotion Eligibility Report - Form View -->
+    <record id="mda_promotion_eligibility_report_form" model="ir.ui.view">
+        <field name="name">mda.promotion.eligibility.report.form</field>
+        <field name="model">mda.promotion.eligibility.report</field>
+        <field name="arch" type="xml">
+            <form string="Promotion Eligibility Report" create="0" edit="0" delete="0">
+                <sheet>
+                    <h1>
+                        <field name="employee_name"/>
+                    </h1>
+
+                    <group string="Employee Information">
+                        <group>
+                            <field name="file_number"/>
+                            <field name="department_id"/>
+                        </group>
+                        <group>
+                            <field name="current_grade"/>
+                            <field name="current_rank"/>
+                        </group>
+                    </group>
+
+                    <separator string="Eligibility Criteria Assessment"/>
+                    <group>
+                        <group string="Confirmation Status" colspan="2">
+                            <field name="confirmed_eligible" widget="boolean"/>
+                            <div class="o_form_label">Requires 2 years from appointment</div>
+                        </group>
+                        <group string="Discipline Check" colspan="2">
+                            <field name="discipline_check" widget="boolean"/>
+                            <div class="o_form_label">No disciplinary cases on record</div>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Promotion Exam" colspan="2">
+                            <field name="exam_check" widget="boolean"/>
+                            <div class="o_form_label">Must have passed promotion exam</div>
+                        </group>
+                        <group string="Promotion Vacancy" colspan="2">
+                            <field name="vacancy_check" widget="boolean"/>
+                            <div class="o_form_label">Vacancy must be available</div>
+                        </group>
+                    </group>
+
+                    <separator string="Overall Eligibility Score"/>
+                    <group>
+                        <field name="eligibility_percentage" widget="percentage"/>
+                        <field name="overall_eligible" widget="boolean"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Promotion Eligibility Report - Search View -->
+    <record id="mda_promotion_eligibility_report_search" model="ir.ui.view">
+        <field name="name">mda.promotion.eligibility.report.search</field>
+        <field name="model">mda.promotion.eligibility.report</field>
+        <field name="arch" type="xml">
+            <search string="Promotion Eligibility Report">
+                <field name="employee_name"/>
+                <field name="file_number"/>
+                <field name="department_id"/>
+                <field name="current_grade"/>
+                <separator/>
+                <filter name="eligible" string="Eligible" domain="[('overall_eligible', '=', True)]"/>
+                <filter name="not_eligible" string="Not Eligible" domain="[('overall_eligible', '=', False)]"/>
+                <filter name="partial" string="Partially Eligible" domain="[('eligibility_percentage', '&gt;=', 50), ('eligibility_percentage', '&lt;', 100)]"/>
+                <separator/>
+                <filter name="confirmed" string="Confirmed Staff" domain="[('confirmed_eligible', '=', True)]"/>
+                <filter name="exam_passed" string="Exam Passed" domain="[('exam_check', '=', True)]"/>
+                <filter name="has_vacancy" string="Vacancy Available" domain="[('vacancy_check', '=', True)]"/>
+                <filter name="clean_record" string="No Disciplinary Cases" domain="[('discipline_check', '=', True)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_department" string="Department" context="{'group_by': 'department_id'}"/>
+                    <filter name="group_grade" string="Grade Level" context="{'group_by': 'current_grade'}"/>
+                    <filter name="group_overall" string="Overall Eligibility" context="{'group_by': 'overall_eligible'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Promotion Eligibility Report - Action -->
+    <record id="action_mda_promotion_eligibility_report" model="ir.actions.act_window">
+        <field name="name">Promotion Eligibility Report</field>
+        <field name="res_model">mda.promotion.eligibility.report</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="mda_promotion_eligibility_report_list"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No eligibility data available
+            </p>
+            <p>
+                This report shows detailed eligibility assessment for all employees
+                against the 5 promotion criteria.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_mda_promotion_reports" name="Promotion Reports" parent="hr.menu_hr_root" sequence="10" groups="hr.group_hr_manager"/>
+
+    <menuitem id="menu_mda_promotion_report" name="Promotion History" parent="menu_mda_promotion_reports" action="action_mda_promotion_report" sequence="1"/>
+
+    <menuitem id="menu_mda_promotion_eligibility_report" name="Eligibility Assessment" parent="menu_mda_promotion_reports" action="action_mda_promotion_eligibility_report" sequence="2"/>
+
+</odoo>

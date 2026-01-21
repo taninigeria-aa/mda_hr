@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Promotion History Report - PDF Template -->
+    <record id="action_report_promotion_history" model="ir.actions.report">
+        <field name="name">Promotion History Report</field>
+        <field name="model">mda.hr.promotion.history</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">mda_hr.report_promotion_history</field>
+        <field name="print_report_name">Promotion_History_${object.employee_id.name}_${object.effective_date.strftime('%Y%m%d')}</field>
+    </record>
+
+    <!-- Promotion History Report Template -->
+    <template id="report_promotion_history">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h1 class="text-center">Promotion History Report</h1>
+
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <strong>Employee Information</strong>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td class="w-25"><strong>Name:</strong></td>
+                                        <td><t t-out="doc.employee_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>File Number:</strong></td>
+                                        <td><t t-out="doc.employee_id.file_number or 'N/A'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Department:</strong></td>
+                                        <td><t t-out="doc.employee_id.department_id.name or 'N/A'"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <strong>Current Position</strong>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td class="w-25"><strong>Rank:</strong></td>
+                                        <td><t t-out="doc.employee_id.rank or 'N/A'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Grade Level:</strong></td>
+                                        <td><t t-out="doc.employee_id.salary_grade_level or 'N/A'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Appointment Date:</strong></td>
+                                        <td><t t-out="doc.employee_id.date_present_appointment.strftime('%d-%m-%Y') if doc.employee_id.date_present_appointment else 'N/A'"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <hr class="mt-4"/>
+
+                        <h3 class="mt-4">Promotion Details</h3>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr class="table-active">
+                                    <th><strong>Previous Grade</strong></th>
+                                    <th><strong>Previous Rank</strong></th>
+                                    <th><strong>New Grade</strong></th>
+                                    <th><strong>New Rank</strong></th>
+                                    <th><strong>Effective Date</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><t t-out="doc.old_salary_grade_level or 'N/A'"/></td>
+                                    <td><t t-out="doc.old_rank or 'N/A'"/></td>
+                                    <td><t t-out="doc.new_salary_grade_level or 'N/A'"/></td>
+                                    <td><t t-out="doc.new_rank or 'N/A'"/></td>
+                                    <td><t t-out="doc.effective_date.strftime('%d-%m-%Y') if doc.effective_date else 'N/A'"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3 class="mt-4">Approval Information</h3>
+                        <table class="table table-sm">
+                            <tr>
+                                <td class="w-25"><strong>Status:</strong></td>
+                                <td>
+                                    <t t-if="doc.state == 'draft'">
+                                        <span class="badge badge-secondary">Draft</span>
+                                    </t>
+                                    <t t-elif="doc.state == 'approved'">
+                                        <span class="badge badge-info">Approved</span>
+                                    </t>
+                                    <t t-elif="doc.state == 'implemented'">
+                                        <span class="badge badge-success">Implemented</span>
+                                    </t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Approval Date:</strong></td>
+                                <td><t t-out="doc.approval_date.strftime('%d-%m-%Y') if doc.approval_date else 'Pending'"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Approved By:</strong></td>
+                                <td><t t-out="doc.approved_by.name if doc.approved_by else 'N/A'"/></td>
+                            </tr>
+                        </table>
+
+                        <t t-if="doc.remarks">
+                            <h3 class="mt-4">Remarks</h3>
+                            <div class="alert alert-light border">
+                                <t t-out="doc.remarks"/>
+                            </div>
+                        </t>
+
+                        <h3 class="mt-4">Eligibility Assessment</h3>
+                        <table class="table table-sm">
+                            <tr>
+                                <td class="w-25"><strong>Eligible for Promotion:</strong></td>
+                                <td>
+                                    <t t-if="doc.is_promotion_eligible">
+                                        <span class="badge badge-success">✓ Yes</span>
+                                    </t>
+                                    <t t-else="">
+                                        <span class="badge badge-danger">✗ No</span>
+                                    </t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Eligibility Status:</strong></td>
+                                <td style="font-size: 0.9em;"><t t-out="doc.promotion_eligibility_status or 'Not assessed'"/></td>
+                            </tr>
+                        </table>
+
+                        <hr class="mt-4"/>
+                        <p class="text-muted text-center" style="font-size: 0.85em;">
+                            Generated on <t t-out="datetime.now().strftime('%d-%m-%Y %H:%M:%S')"/>
+                        </p>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- Promotion Eligibility Summary Report - PDF Template -->
+    <record id="action_report_promotion_eligibility" model="ir.actions.report">
+        <field name="name">Promotion Eligibility Summary</field>
+        <field name="model">mda.promotion.eligibility.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">mda_hr.report_promotion_eligibility</field>
+        <field name="print_report_name">Promotion_Eligibility_${datetime.now().strftime('%Y%m%d')}</field>
+    </record>
+
+    <!-- Promotion Eligibility Report Template -->
+    <template id="report_promotion_eligibility">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h1 class="text-center">Promotion Eligibility Assessment Report</h1>
+                    <p class="text-center text-muted" style="font-size: 0.9em;">
+                        Generated on <t t-out="datetime.now().strftime('%d-%m-%Y %H:%M:%S')"/>
+                    </p>
+
+                    <hr/>
+
+                    <h3 class="mt-4">Eligibility Summary</h3>
+                    <div class="row">
+                        <div class="col-3 text-center">
+                            <div class="alert alert-success">
+                                <strong><t t-out="len([d for d in docs if d.overall_eligible])"/></strong>
+                                <p style="font-size: 0.9em;">Eligible</p>
+                            </div>
+                        </div>
+                        <div class="col-3 text-center">
+                            <div class="alert alert-warning">
+                                <strong><t t-out="len([d for d in docs if d.eligibility_percentage >= 50 and not d.overall_eligible])"/></strong>
+                                <p style="font-size: 0.9em;">Partial (50-99%)</p>
+                            </div>
+                        </div>
+                        <div class="col-3 text-center">
+                            <div class="alert alert-danger">
+                                <strong><t t-out="len([d for d in docs if d.eligibility_percentage &lt; 50])"/></strong>
+                                <p style="font-size: 0.9em;">Low Score (&lt;50%)</p>
+                            </div>
+                        </div>
+                        <div class="col-3 text-center">
+                            <div class="alert alert-info">
+                                <strong><t t-out="len(docs)"/></strong>
+                                <p style="font-size: 0.9em;">Total</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="mt-4">Detailed Assessment</h3>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr class="table-active">
+                                <th><strong>Employee Name</strong></th>
+                                <th class="text-center"><strong>File #</strong></th>
+                                <th class="text-center"><strong>Grade</strong></th>
+                                <th class="text-center"><strong>Confirmed</strong></th>
+                                <th class="text-center"><strong>Discipline</strong></th>
+                                <th class="text-center"><strong>Exam</strong></th>
+                                <th class="text-center"><strong>Vacancy</strong></th>
+                                <th class="text-center"><strong>Score %</strong></th>
+                                <th class="text-center"><strong>Eligible</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="docs" t-as="doc">
+                                <tr t-att-class="'table-success' if doc.overall_eligible else 'table-light'">
+                                    <td><strong><t t-out="doc.employee_name"/></strong></td>
+                                    <td class="text-center"><small><t t-out="doc.file_number or 'N/A'"/></small></td>
+                                    <td class="text-center"><t t-out="doc.current_grade or 'N/A'"/></td>
+                                    <td class="text-center">
+                                        <t t-if="doc.confirmed_eligible">
+                                            <span class="badge badge-success">✓</span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="badge badge-danger">✗</span>
+                                        </t>
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-if="doc.discipline_check">
+                                            <span class="badge badge-success">✓</span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="badge badge-danger">✗</span>
+                                        </t>
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-if="doc.exam_check">
+                                            <span class="badge badge-success">✓</span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="badge badge-danger">✗</span>
+                                        </t>
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-if="doc.vacancy_check">
+                                            <span class="badge badge-success">✓</span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="badge badge-danger">✗</span>
+                                        </t>
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-out="'{:.0f}%'.format(doc.eligibility_percentage)"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-if="doc.overall_eligible">
+                                            <span class="badge badge-success">Yes</span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="badge badge-danger">No</span>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <h3 class="mt-4">Legend</h3>
+                    <ul style="font-size: 0.9em;">
+                        <li><strong>Confirmed:</strong> Staff must be confirmed (2 years from appointment)</li>
+                        <li><strong>Discipline:</strong> No disciplinary cases on record</li>
+                        <li><strong>Exam:</strong> Must have passed promotion examination</li>
+                        <li><strong>Vacancy:</strong> Promotion vacancy must be available</li>
+                        <li><strong>Score %:</strong> Percentage of criteria met (out of 4 criteria)</li>
+                        <li><strong>Eligible:</strong> Overall eligibility status based on all criteria</li>
+                    </ul>
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>

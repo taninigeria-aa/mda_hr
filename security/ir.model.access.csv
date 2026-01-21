@@ -10,3 +10,7 @@ access_mda_hr_promotion_history_user,mda.hr.promotion.history user,mda_hr.model_
 access_mda_hr_promotion_history_manager,mda.hr.promotion.history manager,mda_hr.model_mda_hr_promotion_history,hr.group_hr_manager,1,1,1,1
 access_mda_hr_promotion_schedule_user,mda.hr.promotion.schedule user,mda_hr.model_mda_hr_promotion_schedule,hr.group_hr_user,1,1,0,0
 access_mda_hr_promotion_schedule_manager,mda.hr.promotion.schedule manager,mda_hr.model_mda_hr_promotion_schedule,hr.group_hr_manager,1,1,1,1
+access_mda_promotion_report_user,mda.promotion.report user,mda_hr.model_mda_promotion_report,hr.group_hr_user,1,0,0,0
+access_mda_promotion_report_manager,mda.promotion.report manager,mda_hr.model_mda_promotion_report,hr.group_hr_manager,1,0,0,0
+access_mda_promotion_eligibility_report_user,mda.promotion.eligibility.report user,mda_hr.model_mda_promotion_eligibility_report,hr.group_hr_user,1,0,0,0
+access_mda_promotion_eligibility_report_manager,mda.promotion.eligibility.report manager,mda_hr.model_mda_promotion_eligibility_report,hr.group_hr_manager,1,0,0,0

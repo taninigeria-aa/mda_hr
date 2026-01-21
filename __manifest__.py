@@ -23,8 +23,8 @@ Features:
 * Field validations for Nigerian standards
 * Enhanced reporting capabilities
     """,
-    'author': 'Your Company',
-    'website': 'https://www.yourcompany.com',
+    'author': 'Tani Nigeria Ltd',
+    'website': 'https://www.tani.com.ng',
     'depends': ['hr', 'hr_contract', 'mail'],
     'data': [
         'security/hr_security.xml',
@@ -33,6 +33,8 @@ Features:
         'security/ir.model.access.csv',
         'views/hr_employee_views.xml',
         'views/promotion_history_views.xml',
+        'views/promotion_reports.xml',
+        'views/promotion_pdf_reports.xml',
         'views/hr_report_templates.xml',
         'views/views.xml',
     ],
